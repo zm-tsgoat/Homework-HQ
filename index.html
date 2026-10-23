@@ -1,0 +1,1622 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101321">
+<title>Study HQ</title>
+
+<style>
+:root {
+  --bg:#101321;
+  --panel:#191e30;
+  --panel2:#222941;
+  --line:#303954;
+  --text:#f5f6ff;
+  --muted:#a5aec5;
+  --accent:#a99aff;
+  --green:#6ee7b7;
+  --red:#ff8999;
+  --yellow:#ffd580;
+}
+* { box-sizing:border-box }
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top right,#302650 0,transparent 35%),var(--bg);
+  color:var(--text);
+  font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+button,input,select,textarea { font:inherit }
+button { cursor:pointer }
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+button:disabled { opacity:.4;cursor:not-allowed }
+.app { max-width:1400px;margin:auto;padding:22px }
+header { display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:25px }
+.brand { display:flex;align-items:center;gap:12px }
+.logo {
+  width:45px;height:45px;border-radius:14px;
+  display:grid;place-items:center;
+  background:var(--accent);color:#171329;
+  font-weight:950;font-size:23px;
+}
+.brand-name { font-size:23px;font-weight:900;letter-spacing:-1px }
+.brand-sub { color:var(--muted);font-size:10px;letter-spacing:1.5px }
+.chip { border:1px solid var(--line);border-radius:20px;padding:8px 12px;color:var(--muted);font-size:12px }
+.layout { display:grid;grid-template-columns:205px minmax(0,1fr);gap:22px }
+nav {
+  align-self:start;position:sticky;top:12px;
+  background:#151a29;border:1px solid var(--line);
+  border-radius:17px;padding:10px;
+}
+.nav-label { font-size:10px;color:var(--muted);padding:10px;letter-spacing:1.5px }
+.nav-btn {
+  width:100%;border:0;background:transparent;color:var(--muted);
+  padding:13px 11px;text-align:left;border-radius:10px;margin:2px 0;
+}
+.nav-btn:hover,.nav-btn.active { background:var(--panel2);color:var(--text) }
+.nav-btn.active { box-shadow:inset 3px 0 var(--accent) }
+main { min-width:0 }
+.page { display:none }
+.page.active { display:block;animation:appear .2s ease }
+@keyframes appear { from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none} }
+.eyebrow { color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.6px;margin:0 0 8px }
+h1 { font-size:clamp(27px,4vw,40px);letter-spacing:-1.5px;line-height:1.1;margin:0 0 10px }
+h2 { font-size:18px;margin:0 0 14px }
+h3 { font-size:14px;margin:0 0 7px }
+p { line-height:1.5 }
+.muted { color:var(--muted) }
+.small { font-size:12px }
+.page-head { margin-bottom:22px }
+.page-head p { margin:0 }
+.grid { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:22px 0 }
+.card {
+  min-width:0;background:linear-gradient(145deg,#1b2135,#171c2b);
+  border:1px solid var(--line);border-radius:17px;padding:18px;
+}
+.stat-label { color:var(--muted);font-size:12px }
+.stat { font-size:32px;font-weight:900;letter-spacing:-1px;margin:12px 0 3px }
+.card-head { display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px }
+.card-head h2 { margin:0 }
+.content-grid { display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:14px }
+.section { margin-top:15px }
+.btn {
+  border:1px solid transparent;border-radius:10px;padding:11px 14px;
+  background:var(--accent);color:#171329;font-weight:800;font-size:13px;
+}
+.btn:hover { filter:brightness(1.08) }
+.btn.secondary { background:var(--panel2);color:var(--text);border-color:var(--line) }
+.btn.danger { background:#482630;color:#ffb9c4 }
+.btn.sm { padding:7px 10px;font-size:11px }
+.btn.full { width:100% }
+.actions { display:flex;gap:8px;flex-wrap:wrap }
+form { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px }
+.field { display:flex;flex-direction:column;gap:6px;min-width:0 }
+.field.full { grid-column:1/-1 }
+label { color:var(--muted);font-size:12px;font-weight:700 }
+input,select,textarea {
+  min-width:0;width:100%;padding:12px;
+  background:#101523;color:var(--text);
+  border:1px solid #343d57;border-radius:10px;
+}
+textarea { resize:vertical;min-height:80px }
+input::placeholder,textarea::placeholder { color:#73809a }
+.list { display:flex;flex-direction:column }
+.item { display:flex;gap:10px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line) }
+.item:last-child { border-bottom:0 }
+.item-check { padding-top:2px }
+.item-main { flex:1;min-width:0 }
+.item-title { font-weight:750;overflow-wrap:anywhere }
+.item-title.done { text-decoration:line-through;color:var(--muted) }
+.item-meta { color:var(--muted);font-size:11px;margin-top:5px;line-height:1.6 }
+.item-actions { display:flex;gap:5px;flex-wrap:wrap }
+.badge {
+  display:inline-block;border-radius:7px;padding:4px 7px;
+  background:var(--panel2);color:var(--muted);font-size:10px;
+  border:1px solid var(--line);white-space:nowrap;
+}
+.badge.high { color:#ffb8c2;background:#432633 }
+.badge.good { color:var(--green);background:#18382f }
+.badge.soon { color:var(--yellow);background:#40351e }
+.progress { height:8px;background:#303850;border-radius:20px;overflow:hidden }
+.progress span { display:block;height:100%;width:0;background:linear-gradient(90deg,#8575f3,#c8beff);transition:width .2s }
+.progress-row { display:flex;justify-content:space-between;gap:8px;font-size:12px;margin:14px 0 8px }
+.empty { text-align:center;padding:24px 8px;color:var(--muted);font-size:13px }
+.empty strong { display:block;color:var(--text);margin-bottom:5px }
+.notice { padding:13px;border:1px solid #504776;background:#26213c;color:#ded8ff;border-radius:12px;font-size:12px;line-height:1.6;margin:14px 0 }
+.quick-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px }
+.quick {
+  background:var(--panel);border:1px solid var(--line);border-radius:13px;
+  color:var(--text);text-align:left;padding:14px;
+}
+.quick:hover { border-color:var(--accent) }
+.quick span { display:block;font-size:21px;margin-bottom:7px }
+.quick strong { font-size:12px }
+.quick small { display:block;color:var(--muted);font-size:10px;margin-top:4px }
+.filter-row { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px }
+.filter-row input { flex:1;min-width:130px }
+.filter-row select { width:auto;max-width:100% }
+.subject-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px }
+.subject-card { border:1px solid var(--line);background:#111725;border-radius:12px;padding:13px }
+.subject-card strong { display:block;margin-bottom:5px }
+.subject-card small { color:var(--muted) }
+.timer-card { text-align:center;padding:30px 15px }
+.timer-mode { color:var(--accent);font-size:11px;font-weight:800;letter-spacing:2px }
+.clock { font-size:clamp(60px,12vw,95px);font-weight:900;letter-spacing:-4px;margin:18px 0;line-height:1.2;font-variant-numeric:tabular-nums }
+.timer-actions { display:flex;justify-content:center;gap:8px;flex-wrap:wrap }
+.day-group { margin-bottom:18px }
+.day-title { border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:4px;font-weight:800;font-size:13px }
+.session { display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line) }
+.session:last-child { border-bottom:0 }
+.session-dot { width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0 }
+.session-main { flex:1;min-width:0 }
+.session-main strong { display:block;font-size:12px }
+.session-main small { display:block;color:var(--muted);font-size:11px;margin-top:3px }
+.session-time { font-size:11px;color:var(--muted);white-space:nowrap }
+footer { text-align:center;color:#7d89a2;font-size:11px;margin:25px 0 8px }
+.toast {
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:#f2efff;color:#201a36;padding:12px 17px;border-radius:12px;
+  display:none;z-index:20;max-width:90%;font-size:13px;font-weight:700;text-align:center;
+}
+.toast.show { display:block }
+@media(max-width:1050px) {
+  .grid { grid-template-columns:repeat(2,minmax(0,1fr)) }
+  .content-grid { grid-template-columns:1fr }
+  .subject-grid { grid-template-columns:repeat(2,minmax(0,1fr)) }
+}
+@media(max-width:700px) {
+  .app { padding:14px }
+  .layout { grid-template-columns:1fr;gap:15px }
+  nav { position:static;display:flex;overflow-x:auto;gap:3px;padding:6px }
+  .nav-label { display:none }
+  .nav-btn { width:auto;white-space:nowrap;padding:11px 12px;font-size:12px }
+  .nav-btn.active { box-shadow:inset 0 -3px var(--accent) }
+  .grid { gap:9px;margin:16px 0 }
+  .card { padding:14px }
+  .stat { font-size:27px }
+  .brand-name { font-size:20px }
+  .chip { font-size:10px;padding:7px 9px }
+  .quick-grid { grid-template-columns:repeat(3,minmax(0,1fr));gap:7px }
+  .quick { padding:10px }
+  .quick strong { font-size:10px }
+}
+@media(max-width:390px) {
+  form { grid-template-columns:1fr }
+  .field.full { grid-column:auto }
+  .subject-grid { grid-template-columns:1fr 1fr }
+  .quick-grid { grid-template-columns:1fr }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="logo">S</div>
+    <div>
+      <div class="brand-name">Study HQ</div>
+      <div class="brand-sub">YOUR PERSONAL STUDY SPACE</div>
+    </div>
+  </div>
+  <div class="chip" id="dateChip">Your planner</div>
+</header>
+
+<div class="layout">
+<nav aria-label="Main navigation">
+  <div class="nav-label">WORKSPACE</div>
+  <button class="nav-btn active" data-page="dashboard">⌂ &nbsp; Dashboard</button>
+  <button class="nav-btn" data-page="homework">✓ &nbsp; Homework</button>
+  <button class="nav-btn" data-page="tests">▤ &nbsp; Tests</button>
+  <button class="nav-btn" data-page="planner">▦ &nbsp; Revision planner</button>
+  <button class="nav-btn" data-page="subjects">◈ &nbsp; Subjects</button>
+  <button class="nav-btn" data-page="focus">◷ &nbsp; Focus timer</button>
+  <button class="nav-btn" data-page="settings">⚙ &nbsp; Settings</button>
+</nav>
+
+<main>
+<!-- DASHBOARD -->
+<section class="page active" id="dashboard">
+  <p class="eyebrow" id="greeting">YOUR OVERVIEW</p>
+  <h1 id="welcomeTitle">Let's get things done.</h1>
+  <p class="muted">Your schoolwork, organised in one place.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="stat-label">Homework remaining</div>
+      <div class="stat" id="statTasks">0</div>
+      <div class="muted small">Tasks to complete</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Upcoming tests</div>
+      <div class="stat" id="statTests">0</div>
+      <div class="muted small">Within the next 7 days</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Completed tasks</div>
+      <div class="stat" id="statDone">0</div>
+      <div class="muted small">Work you've finished</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Planned revision</div>
+      <div class="stat" id="statRevision">0m</div>
+      <div class="muted small">In your current plan</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <h2>Today's homework</h2>
+      <button class="btn secondary sm" data-go="homework">View all</button>
+    </div>
+    <div id="dashboardTasks"></div>
+  </div>
+
+  <div class="content-grid">
+    <div class="card">
+      <div class="card-head">
+        <h2>Upcoming tests</h2>
+        <button class="btn secondary sm" data-go="tests">Manage</button>
+      </div>
+      <div id="dashboardTests"></div>
+    </div>
+    <div class="card">
+      <h2>Your progress</h2>
+      <div class="progress-row"><span class="muted">Homework completion</span><strong id="progressText">0%</strong></div>
+      <div class="progress"><span id="progressBar"></span></div>
+      <p class="muted small" id="progressCaption">Add your first task to get started.</p>
+      <div class="progress-row"><span class="muted">Tests entered</span><strong id="testProgressText">0</strong></div>
+      <div class="progress"><span id="testProgressBar"></span></div>
+    </div>
+  </div>
+
+  <div class="quick-grid">
+    <button class="quick" data-go="homework"><span>＋</span><strong>Add homework</strong><small>Track a new task</small></button>
+    <button class="quick" data-go="tests"><span>▤</span><strong>Add a test</strong><small>Record a test date</small></button>
+    <button class="quick" data-go="focus"><span>◷</span><strong>Start focusing</strong><small>Use the study timer</small></button>
+  </div>
+</section>
+
+<!-- HOMEWORK -->
+<section class="page" id="homework">
+  <div class="page-head">
+    <p class="eyebrow">STAY ON TOP OF IT</p>
+    <h1>Homework</h1>
+    <p class="muted">Add tasks, manage deadlines and tick off your work.</p>
+  </div>
+
+  <div class="card">
+    <h2>Add a homework task</h2>
+    <form id="taskForm">
+      <div class="field full">
+        <label for="taskTitle">Task name</label>
+        <input id="taskTitle" maxlength="150" placeholder="e.g. Complete maths worksheet" required>
+      </div>
+      <div class="field">
+        <label for="taskSubject">Subject</label>
+        <select id="taskSubject"></select>
+      </div>
+      <div class="field">
+        <label for="taskDue">Due date</label>
+        <input id="taskDue" type="date">
+      </div>
+      <div class="field">
+        <label for="taskMinutes">Estimated time (minutes)</label>
+        <input id="taskMinutes" type="number" min="5" max="600" step="5" value="30" required>
+      </div>
+      <div class="field">
+        <label for="taskPriority">Priority</label>
+        <select id="taskPriority">
+          <option>Normal</option><option>High</option><option>Low</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button class="btn" type="submit">＋ Add task</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card section">
+    <div class="card-head"><h2>Your tasks</h2><span class="badge" id="taskCount">0 tasks</span></div>
+    <div class="filter-row">
+      <input id="taskSearch" placeholder="Search tasks..." aria-label="Search tasks">
+      <select id="taskFilter" aria-label="Filter tasks">
+        <option value="all">All tasks</option>
+        <option value="open">Remaining</option>
+        <option value="done">Completed</option>
+        <option value="overdue">Overdue</option>
+      </select>
+      <select id="taskSort" aria-label="Sort tasks">
+        <option value="due">Sort: deadline</option>
+        <option value="priority">Sort: priority</option>
+        <option value="newest">Sort: newest</option>
+      </select>
+    </div>
+    <div id="taskList"></div>
+  </div>
+</section>
+
+<!-- TESTS -->
+<section class="page" id="tests">
+  <div class="page-head">
+    <p class="eyebrow">PREPARE EARLY</p>
+    <h1>Tests</h1>
+    <p class="muted">Record your test dates and the topics you need to know.</p>
+  </div>
+
+  <div class="card">
+    <h2>Add a test</h2>
+    <form id="testForm">
+      <div class="field">
+        <label for="testSubject">Subject</label>
+        <select id="testSubject"></select>
+      </div>
+      <div class="field">
+        <label for="testDate">Test date</label>
+        <input id="testDate" type="date" required>
+      </div>
+      <div class="field full">
+        <label for="testTopics">Topics to revise</label>
+        <textarea id="testTopics" maxlength="1500" placeholder="e.g. Fractions, percentages and ratio" required></textarea>
+      </div>
+      <div class="field">
+        <label for="testMinutes">Minutes per session</label>
+        <input id="testMinutes" type="number" min="10" max="120" step="5" value="25" required>
+      </div>
+      <div class="field">
+        <label for="testPriority">Importance</label>
+        <select id="testPriority"><option>Normal</option><option>High</option></select>
+      </div>
+      <div class="form-actions">
+        <button class="btn" type="submit">＋ Add test</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card section">
+    <div class="card-head"><h2>All tests</h2><span class="badge" id="testCount">0 tests</span></div>
+    <div class="filter-row">
+      <input id="testSearch" placeholder="Search subjects or topics..." aria-label="Search tests">
+      <select id="testFilter" aria-label="Filter tests">
+        <option value="upcoming">Upcoming</option>
+        <option value="all">All tests</option>
+        <option value="past">Past tests</option>
+      </select>
+    </div>
+    <div id="testList"></div>
+  </div>
+</section>
+
+<!-- REVISION PLANNER -->
+<section class="page" id="planner">
+  <div class="page-head">
+    <p class="eyebrow">MAKE EVERY SESSION COUNT</p>
+    <h1>Revision planner</h1>
+    <p class="muted">Build a suggested revision schedule from your test dates.</p>
+  </div>
+
+  <div class="notice">
+    The planner works backwards from each test date and distributes sessions across the available days. It uses the topics and session lengths you enter. It cannot know your school timetable or other commitments, so check the schedule before following it.
+  </div>
+
+  <div class="card">
+    <h2>Plan settings</h2>
+    <div class="field-grid">
+      <div class="field">
+        <label for="planDays">Plan the next</label>
+        <select id="planDays">
+          <option value="3">3 days</option>
+          <option value="7" selected>7 days</option>
+          <option value="14">14 days</option>
+          <option value="30">30 days</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="dailyLimit">Maximum revision each day</label>
+        <select id="dailyLimit">
+          <option value="30">30 minutes</option>
+          <option value="45">45 minutes</option>
+          <option value="60" selected>60 minutes</option>
+          <option value="90">90 minutes</option>
+          <option value="120">120 minutes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="planStart">Start date</label>
+        <input type="date" id="planStart">
+      </div>
+      <div class="field">
+        <label for="planStyle">Planning style</label>
+        <select id="planStyle">
+          <option value="balanced">Balanced across days</option>
+          <option value="near">Prioritise nearer tests</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions section">
+      <button class="btn" id="generatePlan">Generate my plan</button>
+      <button class="btn secondary" id="clearPlan">Clear plan</button>
+    </div>
+  </div>
+
+  <div class="card section">
+    <div class="card-head">
+      <h2>Suggested sessions</h2>
+      <span class="badge" id="planCount">0 sessions</span>
+    </div>
+    <div id="planSummary" class="muted small"></div>
+    <div id="planList" class="section"></div>
+  </div>
+</section>
+
+<!-- SUBJECTS -->
+<section class="page" id="subjects">
+  <div class="page-head">
+    <p class="eyebrow">KNOW WHERE YOU STAND</p>
+    <h1>Subjects</h1>
+    <p class="muted">See your tasks and upcoming tests for each subject.</p>
+  </div>
+
+  <div class="card">
+    <h2>Add your own subject</h2>
+    <form id="subjectForm">
+      <div class="field">
+        <label for="newSubject">Subject name</label>
+        <input id="newSubject" maxlength="35" placeholder="e.g. Music" required>
+      </div>
+      <div class="field" style="justify-content:end">
+        <button class="btn" type="submit">＋ Add subject</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card section">
+    <div class="card-head"><h2>Your subjects</h2><span class="badge" id="subjectCount"></span></div>
+    <div id="subjectList" class="subject-grid"></div>
+  </div>
+</section>
+
+<!-- TIMER -->
+<section class="page" id="focus">
+  <div class="page-head">
+    <p class="eyebrow">ONE THING AT A TIME</p>
+    <h1>Focus timer</h1>
+    <p class="muted">Choose a task, focus for a while and take a proper break.</p>
+  </div>
+
+  <div class="card timer-card">
+    <div class="timer-mode" id="timerMode">FOCUS SESSION</div>
+    <div class="clock" id="clock" role="timer" aria-live="off">25:00</div>
+    <div class="field" style="max-width:280px;margin:0 auto 18px;text-align:left">
+      <label for="focusTask">What are you working on?</label>
+      <select id="focusTask"><option value="">Choose a task (optional)</option></select>
+    </div>
+    <div class="field" style="max-width:280px;margin:0 auto 18px;text-align:left">
+      <label for="focusLength">Session length</label>
+      <select id="focusLength">
+        <option value="15">15 minutes</option>
+        <option value="25" selected>25 minutes</option>
+        <option value="30">30 minutes</option>
+        <option value="45">45 minutes</option>
+        <option value="60">60 minutes</option>
+      </select>
+    </div>
+    <div class="timer-actions">
+      <button class="btn" id="timerStart">Start focus</button>
+      <button class="btn secondary" id="timerPause" disabled>Pause</button>
+      <button class="btn secondary" id="timerReset">Reset</button>
+      <button class="btn secondary" id="breakStart">5-minute break</button>
+    </div>
+    <p class="muted small" id="timerMessage">Your timer runs while this page stays open.</p>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+    <div class="card"><div class="stat-label">Completed focus sessions</div><div class="stat" id="focusCount">0</div></div>
+    <div class="card"><div class="stat-label">Total focus time</div><div class="stat" id="focusTotal">0m</div></div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section class="page" id="settings">
+  <div class="page-head">
+    <p class="eyebrow">MAKE IT YOURS</p>
+    <h1>Settings</h1>
+    <p class="muted">Personalise Study HQ and manage your saved data.</p>
+  </div>
+
+  <div class="card">
+    <h2>Your profile</h2>
+    <form id="profileForm">
+      <div class="field">
+        <label for="profileName">What should the dashboard call you?</label>
+        <input id="profileName" maxlength="40" placeholder="Your name or nickname">
+      </div>
+      <div class="field">
+        <label for="schoolYear">School year</label>
+        <select id="schoolYear">
+          <option>Year 7</option><option>Year 8</option><option>Year 9</option>
+          <option>Year 10</option><option>Year 11</option><option>Year 12</option>
+          <option>Year 13</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button class="btn" type="submit">Save profile</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card section">
+    <h2>Data management</h2>
+    <p class="muted small">Your planner data is stored in this browser. Export a backup before clearing browser data or moving to another device.</p>
+    <div class="actions">
+      <button class="btn" id="exportData">Export backup</button>
+      <button class="btn secondary" id="importButton">Import backup</button>
+      <input id="importFile" type="file" accept=".json,application/json" hidden>
+      <button class="btn secondary" id="resetPlanSettings">Reset planner settings</button>
+      <button class="btn danger" id="deleteAll">Delete all study data</button>
+    </div>
+  </div>
+
+  <div class="card section">
+    <h2>About Study HQ</h2>
+    <p class="muted small">This is a standalone app. It does not require an account, internet connection or external library. Data stays in your browser unless you export it yourself. It does not automatically synchronise between devices.</p>
+    <p class="muted small">The revision planner generates suggestions, not a guaranteed perfect timetable. Review the sessions and adjust them to suit your workload.</p>
+  </div>
+</section>
+</main>
+</div>
+
+<footer>STUDY HQ · Your work. Your plan. Your progress.</footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* ===================== DATA ===================== */
+
+const STORAGE_KEY = "study_hq_complete_v1";
+const DEFAULT_SUBJECTS = [
+  "Maths","English","Science","Biology","Chemistry","Physics",
+  "History","Geography","Latin","French","Spanish","Computing",
+  "DT","RE","Other"
+];
+
+const $ = id => document.getElementById(id);
+
+function localDate(date = new Date()) {
+  const d = new Date(date);
+  return d.getFullYear() + "-" +
+    String(d.getMonth()+1).padStart(2,"0") + "-" +
+    String(d.getDate()).padStart(2,"0");
+}
+
+function addDays(iso, amount) {
+  const d = new Date(iso + "T12:00:00");
+  d.setDate(d.getDate() + amount);
+  return localDate(d);
+}
+
+function daysBetween(a,b) {
+  return Math.round(
+    (new Date(b+"T12:00:00") - new Date(a+"T12:00:00")) / 86400000
+  );
+}
+
+function formatDate(iso, options = {}) {
+  if (!iso) return "No date set";
+  const d = new Date(iso+"T12:00:00");
+  if (Number.isNaN(d.getTime())) return "Invalid date";
+  return d.toLocaleDateString(undefined,{
+    weekday:options.weekday,
+    day:"numeric",
+    month:"short",
+    year:options.year ? "numeric" : undefined
+  });
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[char]);
+}
+
+function makeId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,9);
+}
+
+function freshState() {
+  return {
+    version:1,
+    tasks:[],
+    tests:[],
+    subjects:[...DEFAULT_SUBJECTS],
+    plan:[],
+    profile:{name:"",year:"Year 8"},
+    settings:{planDays:7,dailyLimit:60,planStyle:"balanced",planStart:localDate()},
+    focus:{sessions:0,minutes:0}
+  };
+}
+
+let state = freshState();
+let timerRemaining = 25 * 60;
+let timerInterval = null;
+let timerEndAt = null;
+let timerMode = "focus";
+let toastTimeout = null;
+
+/* ===================== STORAGE ===================== */
+
+function normaliseState(raw) {
+  const base = freshState();
+  if (!raw || typeof raw !== "object") return base;
+
+  base.tasks = Array.isArray(raw.tasks) ? raw.tasks.filter(t =>
+    t && typeof t.title === "string" && typeof t.id === "string"
+  ) : [];
+
+  base.tests = Array.isArray(raw.tests) ? raw.tests.filter(t =>
+    t && typeof t.topics === "string" && typeof t.id === "string"
+  ) : [];
+
+  base.subjects = Array.isArray(raw.subjects)
+    ? [...new Set(raw.subjects.filter(s => typeof s === "string" && s.trim()).map(s => s.trim()))]
+    : base.subjects;
+
+  base.plan = Array.isArray(raw.plan) ? raw.plan.filter(s =>
+    s && typeof s.id === "string" && typeof s.date === "string"
+  ) : [];
+
+  base.profile = {...base.profile,...(raw.profile || {})};
+  base.settings = {...base.settings,...(raw.settings || {})};
+  base.focus = {...base.focus,...(raw.focus || {})};
+
+  return base;
+}
+
+function saveState(showError = true) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    return true;
+  } catch (error) {
+    if (showError) toast("Saving failed. Export a backup if possible.");
+    return false;
+  }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) state = normaliseState(JSON.parse(raw));
+  } catch (error) {
+    state = freshState();
+    toast("Saved data could not be read. A fresh planner has been opened.");
+  }
+}
+
+/* ===================== UTILITIES ===================== */
+
+function toast(message) {
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => el.classList.remove("show"), 2800);
+}
+
+function emptyHTML(title, description) {
+  return '<div class="empty"><strong>'+escapeHTML(title)+'</strong>'+
+    escapeHTML(description)+'</div>';
+}
+
+function priorityRank(priority) {
+  return priority === "High" ? 0 : priority === "Normal" ? 1 : 2;
+}
+
+function deadlineText(date) {
+  if (!date) return "No deadline";
+  const diff = daysBetween(localDate(),date);
+  if (diff < 0) return "Overdue by "+Math.abs(diff)+" day"+(diff === -1 ? "" : "s");
+  if (diff === 0) return "Due today";
+  if (diff === 1) return "Due tomorrow";
+  return "Due "+formatDate(date);
+}
+
+function dateBadge(date) {
+  if (!date) return "";
+  const diff = daysBetween(localDate(),date);
+  if (diff < 0) return '<span class="badge high">Overdue</span>';
+  if (diff === 0) return '<span class="badge soon">Today</span>';
+  if (diff <= 3) return '<span class="badge soon">'+diff+' day'+(diff===1?"":"s")+'</span>';
+  return "";
+}
+
+function getSubjectOptions(selected) {
+  return state.subjects.map(subject =>
+    '<option value="'+escapeHTML(subject)+'"'+
+    (subject === selected ? " selected" : "")+'>'+
+    escapeHTML(subject)+'</option>'
+  ).join("");
+}
+
+function refreshSubjectDropdowns() {
+  const taskSelect = $("taskSubject");
+  const testSelect = $("testSubject");
+  const taskValue = taskSelect.value;
+  const testValue = testSelect.value;
+  taskSelect.innerHTML = getSubjectOptions(taskValue);
+  testSelect.innerHTML = getSubjectOptions(testValue);
+}
+
+function showPage(name) {
+  const target = $(name);
+  if (!target || !target.classList.contains("page")) return;
+
+  document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+  target.classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === name);
+  });
+
+  if (name === "focus") refreshFocusTaskOptions();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll("[data-page]").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.page));
+});
+
+document.querySelectorAll("[data-go]").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.go));
+});
+
+/* ===================== HOMEWORK ===================== */
+
+function renderTasks() {
+  const filter = $("taskFilter").value;
+  const search = $("taskSearch").value.trim().toLowerCase();
+  let tasks = [...state.tasks];
+
+  if (filter === "open") tasks = tasks.filter(t => !t.done);
+  if (filter === "done") tasks = tasks.filter(t => t.done);
+  if (filter === "overdue") tasks = tasks.filter(t => !t.done && t.due && t.due < localDate());
+
+  if (search) tasks = tasks.filter(t =>
+    (t.title+" "+t.subject+" "+t.priority).toLowerCase().includes(search)
+  );
+
+  if ($("taskSort").value === "priority") {
+    tasks.sort((a,b) => priorityRank(a.priority)-priorityRank(b.priority));
+  } else if ($("taskSort").value === "newest") {
+    tasks.sort((a,b) => b.created-a.created);
+  } else {
+    tasks.sort((a,b) => {
+      if (a.done !== b.done) return Number(a.done)-Number(b.done);
+      if (!a.due) return b.due ? 1 : 0;
+      if (!b.due) return -1;
+      return a.due.localeCompare(b.due);
+    });
+  }
+
+  $("taskCount").textContent = tasks.length+" task"+(tasks.length===1?"":"s");
+
+  if (!tasks.length) {
+    $("taskList").innerHTML = emptyHTML(
+      search || filter !== "all" ? "No matching tasks" : "Nothing here yet",
+      search || filter !== "all" ? "Try changing your search or filter." : "Add homework above to start building your list."
+    );
+    return;
+  }
+
+  $("taskList").innerHTML = tasks.map(task => `
+    <div class="item">
+      <div class="item-check">
+        <input type="checkbox" aria-label="Mark ${escapeHTML(task.title)} complete"
+          data-task-toggle="${escapeHTML(task.id)}" ${task.done?"checked":""}>
+      </div>
+      <div class="item-main">
+        <div class="item-title ${task.done?"done":""}">${escapeHTML(task.title)}</div>
+        <div class="item-meta">
+          ${escapeHTML(task.subject)} · ${Number(task.minutes)||30} min · ${escapeHTML(deadlineText(task.due))}
+          <br>
+          <span class="badge ${task.priority==="High"?"high":""}">${escapeHTML(task.priority||"Normal")} priority</span>
+          ${dateBadge(task.due)}
+        </div>
+        <div class="item-actions" style="margin-top:9px">
+          <button class="btn secondary sm" data-task-edit="${escapeHTML(task.id)}">Edit</button>
+          <button class="btn secondary sm" data-task-focus="${escapeHTML(task.id)}">Focus</button>
+          <button class="btn danger sm" data-task-delete="${escapeHTML(task.id)}">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+$("taskForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const title = $("taskTitle").value.trim();
+  const minutes = Number($("taskMinutes").value);
+
+  if (!title) return toast("Enter a task name.");
+  if (!Number.isFinite(minutes) || minutes < 5 || minutes > 600) {
+    return toast("Enter a time between 5 and 600 minutes.");
+  }
+
+  state.tasks.push({
+    id:makeId(),
+    title,
+    subject:$("taskSubject").value || "Other",
+    due:$("taskDue").value,
+    minutes,
+    priority:$("taskPriority").value,
+    done:false,
+    created:Date.now()
+  });
+
+  $("taskTitle").value = "";
+  $("taskDue").value = "";
+  $("taskMinutes").value = "30";
+  $("taskPriority").value = "Normal";
+
+  saveState();
+  renderAll();
+  toast("Homework added.");
+});
+
+$("taskFilter").addEventListener("change",renderTasks);
+$("taskSort").addEventListener("change",renderTasks);
+$("taskSearch").addEventListener("input",renderTasks);
+
+document.addEventListener("change", event => {
+  const id = event.target.dataset.taskToggle;
+  if (!id) return;
+
+  const task = state.tasks.find(t => t.id === id);
+  if (!task) return;
+
+  task.done = event.target.checked;
+  task.completedAt = task.done ? Date.now() : null;
+  saveState();
+  renderAll();
+  if (task.done) toast("Task completed. Nice work.");
+});
+
+document.addEventListener("click", event => {
+  const editButton = event.target.closest("[data-task-edit]");
+  const deleteButton = event.target.closest("[data-task-delete]");
+  const focusButton = event.target.closest("[data-task-focus]");
+
+  if (editButton) {
+    editTask(editButton.dataset.taskEdit);
+  }
+
+  if (deleteButton) {
+    deleteTask(deleteButton.dataset.taskDelete);
+  }
+
+  if (focusButton) {
+    const task = state.tasks.find(t => t.id === focusButton.dataset.taskFocus);
+    if (!task) return;
+    showPage("focus");
+    $("focusTask").value = task.id;
+    refreshFocusTaskOptions();
+    $("focusTask").value = task.id;
+    toast("Task selected for your focus session.");
+  }
+});
+
+function editTask(id) {
+  const task = state.tasks.find(t => t.id === id);
+  if (!task) return;
+
+  const title = prompt("Edit task name:",task.title);
+  if (title === null) return;
+  if (!title.trim()) return toast("Task name cannot be empty.");
+
+  const due = prompt("Deadline (YYYY-MM-DD), or leave blank:",task.due || "");
+  if (due === null) return;
+  if (due && !/^\d{4}-\d{2}-\d{2}$/.test(due)) {
+    return toast("Use the date format YYYY-MM-DD.");
+  }
+  if (due && Number.isNaN(new Date(due+"T12:00:00").getTime())) {
+    return toast("That date is not valid.");
+  }
+
+  task.title = title.trim();
+  task.due = due;
+  saveState();
+  renderAll();
+  toast("Task updated.");
+}
+
+function deleteTask(id) {
+  const task = state.tasks.find(t => t.id === id);
+  if (!task) return;
+  if (!confirm('Delete "'+task.title+'"?')) return;
+
+  state.tasks = state.tasks.filter(t => t.id !== id);
+  state.plan = state.plan.filter(s => s.taskId !== id);
+  saveState();
+  renderAll();
+  toast("Task deleted.");
+}
+
+/* ===================== TESTS ===================== */
+
+$("testForm").addEventListener("submit",event => {
+  event.preventDefault();
+
+  const date = $("testDate").value;
+  const topics = $("testTopics").value.trim();
+  const minutes = Number($("testMinutes").value);
+
+  if (!date || !topics) return toast("Enter the test date and topics.");
+  if (daysBetween(localDate(),date) < 0) {
+    if (!confirm("This test date is in the past. Add it anyway?")) return;
+  }
+  if (!Number.isFinite(minutes) || minutes < 10 || minutes > 120) {
+    return toast("Choose a session length between 10 and 120 minutes.");
+  }
+
+  state.tests.push({
+    id:makeId(),
+    subject:$("testSubject").value || "Other",
+    date,
+    topics,
+    minutes,
+    priority:$("testPriority").value,
+    created:Date.now()
+  });
+
+  $("testDate").value = "";
+  $("testTopics").value = "";
+  $("testMinutes").value = "25";
+  $("testPriority").value = "Normal";
+
+  saveState();
+  renderAll();
+  toast("Test added. You can now generate a revision plan.");
+});
+
+$("testSearch").addEventListener("input",renderTests);
+$("testFilter").addEventListener("change",renderTests);
+
+function renderTests() {
+  const filter = $("testFilter").value;
+  const search = $("testSearch").value.trim().toLowerCase();
+  let tests = [...state.tests];
+
+  if (filter === "upcoming") tests = tests.filter(t => t.date >= localDate());
+  if (filter === "past") tests = tests.filter(t => t.date < localDate());
+
+  if (search) tests = tests.filter(t =>
+    (t.subject+" "+t.topics).toLowerCase().includes(search)
+  );
+
+  tests.sort((a,b) => a.date.localeCompare(b.date));
+  $("testCount").textContent = tests.length+" test"+(tests.length===1?"":"s");
+
+  if (!tests.length) {
+    $("testList").innerHTML = emptyHTML(
+      "No tests found",
+      "Add a test above, or change the selected filter."
+    );
+    return;
+  }
+
+  $("testList").innerHTML = tests.map(test => {
+    const diff = daysBetween(localDate(),test.date);
+    const timing = diff < 0 ? Math.abs(diff)+" day"+(diff===-1?"":"s")+" ago"
+      : diff===0 ? "Today" : diff===1 ? "Tomorrow" : "In "+diff+" days";
+    return `
+      <div class="item">
+        <div class="item-main">
+          <div class="item-title">${escapeHTML(test.subject)}</div>
+          <div class="item-meta">${escapeHTML(formatDate(test.date,{year:true}))} · ${escapeHTML(timing)}<br>
+          ${escapeHTML(test.topics)}<br>
+          <span class="badge ${test.priority==="High"?"high":""}">${escapeHTML(test.priority)} priority</span>
+          <span class="badge">${Number(test.minutes)||25} min per session</span></div>
+          <div class="item-actions" style="margin-top:9px">
+            <button class="btn secondary sm" data-test-edit="${escapeHTML(test.id)}">Edit</button>
+            <button class="btn secondary sm" data-test-plan="${escapeHTML(test.id)}">Plan revision</button>
+            <button class="btn danger sm" data-test-delete="${escapeHTML(test.id)}">Delete</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+document.addEventListener("click",event => {
+  const del = event.target.closest("[data-test-delete]");
+  const edit = event.target.closest("[data-test-edit]");
+  const plan = event.target.closest("[data-test-plan]");
+
+  if (del) {
+    const test = state.tests.find(t => t.id === del.dataset.testDelete);
+    if (!test) return;
+    if (!confirm("Delete this test?")) return;
+    state.tests = state.tests.filter(t => t.id !== test.id);
+    state.plan = state.plan.filter(s => s.testId !== test.id);
+    saveState();
+    renderAll();
+    toast("Test deleted.");
+  }
+
+  if (edit) editTest(edit.dataset.testEdit);
+
+  if (plan) {
+    const test = state.tests.find(t => t.id === plan.dataset.testPlan);
+    if (!test) return;
+    $("planStart").value = localDate();
+    $("planDays").value = String(Math.min(30,Math.max(3,daysBetween(localDate(),test.date)||3)));
+    $("planDays").value = ["3","7","14","30"].includes($("planDays").value)
+      ? $("planDays").value : "7";
+    showPage("planner");
+    generatePlan(test.id);
+  }
+});
+
+function editTest(id) {
+  const test = state.tests.find(t => t.id === id);
+  if (!test) return;
+
+  const date = prompt("Test date (YYYY-MM-DD):",test.date);
+  if (date === null) return;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+      Number.isNaN(new Date(date+"T12:00:00").getTime())) {
+    return toast("Enter a valid date in YYYY-MM-DD format.");
+  }
+
+  const topics = prompt("Topics to revise:",test.topics);
+  if (topics === null) return;
+  if (!topics.trim()) return toast("Topics cannot be empty.");
+
+  test.date = date;
+  test.topics = topics.trim();
+  saveState();
+  renderAll();
+  toast("Test updated.");
+}
+
+/* ===================== REVISION PLANNER ===================== */
+
+function generatePlan(onlyTestId = null) {
+  const start = $("planStart").value || localDate();
+  const days = Number($("planDays").value);
+  const dailyLimit = Number($("dailyLimit").value);
+  const style = $("planStyle").value;
+  const end = addDays(start,days-1);
+
+  const relevant = state.tests.filter(test =>
+    (!onlyTestId || test.id === onlyTestId) &&
+    test.date >= start &&
+    test.date > start &&
+    test.date <= addDays(end,1)
+  ).sort((a,b) => a.date.localeCompare(b.date));
+
+  if (!relevant.length) {
+    toast("Add a future test within your selected planning window first.");
+    return;
+  }
+
+  const newPlan = [];
+  const dailyUsed = {};
+  let sequence = 0;
+
+  /*
+    Spread sessions over the days before each test.
+    Each day is limited by the user's selected daily limit.
+    Higher-priority and nearer tests are considered first.
+  */
+  const ordered = [...relevant].sort((a,b) => {
+    if (a.priority !== b.priority) return a.priority === "High" ? -1 : 1;
+    return a.date.localeCompare(b.date);
+  });
+
+  for (const test of ordered) {
+    const availableDays = [];
+    for (let d = start; d < test.date; d = addDays(d,1)) {
+      availableDays.push(d);
+    }
+
+    if (!availableDays.length) continue;
+
+    const sessionMinutes = Math.min(Number(test.minutes)||25,dailyLimit);
+    let candidates = [...availableDays];
+
+    if (style === "near") candidates.reverse();
+
+    /*
+      Aim for approximately three revision sessions per test,
+      increasing slightly for longer gaps, without overloading days.
+    */
+    const desired = Math.min(
+      availableDays.length,
+      Math.max(1,Math.min(5,Math.ceil(availableDays.length/2)))
+    );
+
+    let placed = 0;
+    let attempts = 0;
+
+    while (placed < desired && attempts < availableDays.length * 3) {
+      const date = candidates[(placed + attempts) % candidates.length];
+      attempts++;
+
+      const used = dailyUsed[date] || 0;
+      if (used + sessionMinutes > dailyLimit) continue;
+
+      dailyUsed[date] = used + sessionMinutes;
+      newPlan.push({
+        id:makeId(),
+        testId:test.id,
+        subject:test.subject,
+        topics:test.topics,
+        date,
+        minutes:sessionMinutes,
+        sequence:++sequence,
+        done:false
+      });
+      placed++;
+    }
+  }
+
+  if (!newPlan.length) {
+    toast("No sessions could fit. Increase the daily limit or move the start date earlier.");
+    return;
+  }
+
+  if (onlyTestId) {
+    state.plan = state.plan.filter(s => s.testId !== onlyTestId);
+    state.plan.push(...newPlan);
+  } else {
+    state.plan = state.plan.filter(s => s.date < start || s.date > end);
+    state.plan.push(...newPlan);
+  }
+
+  state.settings.planDays = days;
+  state.settings.dailyLimit = dailyLimit;
+  state.settings.planStyle = style;
+  state.settings.planStart = start;
+
+  saveState();
+  renderAll();
+  toast("Revision plan generated.");
+}
+
+$("generatePlan").addEventListener("click",() => generatePlan());
+
+$("clearPlan").addEventListener("click",() => {
+  if (!state.plan.length) return toast("Your plan is already empty.");
+  if (!confirm("Clear all suggested revision sessions? Your tests will remain.")) return;
+  state.plan = [];
+  saveState();
+  renderAll();
+  toast("Revision plan cleared.");
+});
+
+function renderPlan() {
+  const plan = [...state.plan].sort((a,b) =>
+    a.date.localeCompare(b.date) || a.sequence-b.sequence
+  );
+
+  $("planCount").textContent = plan.length+" session"+(plan.length===1?"":"s");
+  const total = plan.reduce((sum,s) => sum+(Number(s.minutes)||0),0);
+  $("planSummary").textContent = plan.length
+    ? total+" minutes planned · "+new Set(plan.map(s=>s.date)).size+" study days"
+    : "Generate a plan after adding your upcoming tests.";
+
+  if (!plan.length) {
+    $("planList").innerHTML = emptyHTML(
+      "Your schedule is waiting",
+      "Add a test, then press Generate my plan."
+    );
+    return;
+  }
+
+  const groups = {};
+  for (const session of plan) {
+    if (!groups[session.date]) groups[session.date] = [];
+    groups[session.date].push(session);
+  }
+
+  $("planList").innerHTML = Object.keys(groups).sort().map(date => `
+    <div class="day-group">
+      <div class="day-title">${escapeHTML(formatDate(date,{weekday:"long"}))} <span class="muted">${escapeHTML(formatDate(date))}</span></div>
+      ${groups[date].map(session => `
+        <div class="session">
+          <input type="checkbox" aria-label="Complete revision session" data-session-toggle="${escapeHTML(session.id)}" ${session.done?"checked":""}>
+          <span class="session-dot"></span>
+          <div class="session-main">
+            <strong style="${session.done?"text-decoration:line-through;color:var(--muted)":""}">${escapeHTML(session.subject)}</strong>
+            <small>${escapeHTML(session.topics)}</small>
+          </div>
+          <span class="session-time">${Number(session.minutes)||25} min</span>
+          <button class="btn danger sm" data-session-delete="${escapeHTML(session.id)}">×</button>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+document.addEventListener("change",event => {
+  const id = event.target.dataset.sessionToggle;
+  if (!id) return;
+  const session = state.plan.find(s => s.id === id);
+  if (!session) return;
+  session.done = event.target.checked;
+  saveState();
+  renderAll();
+  if (session.done) toast("Revision session completed.");
+});
+
+document.addEventListener("click",event => {
+  const button = event.target.closest("[data-session-delete]");
+  if (!button) return;
+  state.plan = state.plan.filter(s => s.id !== button.dataset.sessionDelete);
+  saveState();
+  renderAll();
+  toast("Revision session removed.");
+});
+
+/* ===================== SUBJECTS ===================== */
+
+$("subjectForm").addEventListener("submit",event => {
+  event.preventDefault();
+  const name = $("newSubject").value.trim();
+  if (!name) return;
+  if (state.subjects.some(s => s.toLowerCase() === name.toLowerCase())) {
+    return toast("That subject already exists.");
+  }
+  state.subjects.push(name);
+  $("newSubject").value = "";
+  refreshSubjectDropdowns();
+  saveState();
+  renderAll();
+  toast("Subject added.");
+});
+
+function renderSubjects() {
+  $("subjectCount").textContent = state.subjects.length+" subjects";
+
+  $("subjectList").innerHTML = state.subjects.map((subject,index) => {
+    const tasks = state.tasks.filter(t => t.subject === subject);
+    const completed = tasks.filter(t => t.done).length;
+    const tests = state.tests.filter(t => t.subject === subject && t.date >= localDate()).length;
+    const percent = tasks.length ? Math.round(completed/tasks.length*100) : 0;
+
+    return `
+      <div class="subject-card">
+        <strong>${escapeHTML(subject)}</strong>
+        <small>${tasks.length} task${tasks.length===1?"":"s"} · ${tests} upcoming test${tests===1?"":"s"}</small>
+        <div class="progress-row"><span class="muted">Task progress</span><b>${percent}%</b></div>
+        <div class="progress"><span style="width:${percent}%"></span></div>
+        <button class="btn secondary sm" style="margin-top:12px" data-subject-filter="${escapeHTML(subject)}">View tasks</button>
+        ${!DEFAULT_SUBJECTS.includes(subject) ? `<button class="btn danger sm" style="margin-top:12px" data-subject-delete="${escapeHTML(subject)}">Remove</button>` : ""}
+      </div>
+    `;
+  }).join("");
+}
+
+document.addEventListener("click",event => {
+  const filter = event.target.closest("[data-subject-filter]");
+  const remove = event.target.closest("[data-subject-delete]");
+
+  if (filter) {
+    showPage("homework");
+    $("taskSearch").value = filter.dataset.subjectFilter;
+    renderTasks();
+  }
+
+  if (remove) {
+    const subject = remove.dataset.subjectDelete;
+    const hasTasks = state.tasks.some(t => t.subject === subject);
+    const hasTests = state.tests.some(t => t.subject === subject);
+    if ((hasTasks || hasTests) &&
+        !confirm("This subject has saved tasks or tests. Remove the subject from the subject list? Existing records will remain.")) return;
+
+    state.subjects = state.subjects.filter(s => s !== subject);
+    refreshSubjectDropdowns();
+    saveState();
+    renderAll();
+    toast("Subject removed from the list.");
+  }
+});
+
+/* ===================== FOCUS TIMER ===================== */
+
+function stopTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
+  timerEndAt = null;
+  $("timerPause").disabled = true;
+  $("timerStart").disabled = false;
+}
+
+function updateClock() {
+  const minutes = Math.floor(Math.max(0,timerRemaining)/60);
+  const seconds = Math.max(0,timerRemaining)%60;
+  $("clock").textContent = String(minutes).padStart(2,"0")+":"+
+    String(seconds).padStart(2,"0");
+}
+
+function startTimer(mode = timerMode) {
+  if (timerInterval) return;
+
+  timerMode = mode;
+  if (timerRemaining <= 0) {
+    timerRemaining = mode === "break" ? 5*60 : Number($("focusLength").value)*60;
+  }
+
+  $("timerMode").textContent = mode === "break" ? "BREAK TIME" : "FOCUS SESSION";
+  $("timerStart").disabled = true;
+  $("timerPause").disabled = false;
+  $("timerMessage").textContent = mode === "break"
+    ? "Take a proper break. Come back when the timer ends."
+    : "Focus on one task. You can pause whenever you need.";
+
+  timerEndAt = Date.now() + timerRemaining*1000;
+
+  timerInterval = setInterval(() => {
+    timerRemaining = Math.max(0,Math.ceil((timerEndAt-Date.now())/1000));
+    updateClock();
+
+    if (timerRemaining <= 0) {
+      stopTimer();
+      if (timerMode === "focus") {
+        state.focus.sessions = (Number(state.focus.sessions)||0)+1;
+        state.focus.minutes = (Number(state.focus.minutes)||0)+
+          Number($("focusLength").value);
+        saveState();
+        renderDashboard();
+        $("timerMessage").textContent = "Session complete. Take a break if you need one.";
+        toast("Focus session complete. Nice work.");
+      } else {
+        $("timerMessage").textContent = "Break finished. Ready when you are.";
+        toast("Break finished.");
+      }
+    }
+  },250);
+}
+
+$("timerStart").addEventListener("click",() => startTimer("focus"));
+
+$("timerPause").addEventListener("click",() => {
+  if (!timerInterval) return;
+  timerRemaining = Math.max(0,Math.ceil((timerEndAt-Date.now())/1000));
+  stopTimer();
+  updateClock();
+  $("timerMessage").textContent = "Timer paused. Press Start to continue.";
+});
+
+$("timerReset").addEventListener("click",() => {
+  stopTimer();
+  timerMode = "focus";
+  timerRemaining = Number($("focusLength").value)*60;
+  $("timerMode").textContent = "FOCUS SESSION";
+  $("timerMessage").textContent = "Timer reset.";
+  updateClock();
+});
+
+$("breakStart").addEventListener("click",() => {
+  stopTimer();
+  timerMode = "break";
+  timerRemaining = 5*60;
+  updateClock();
+  startTimer("break");
+});
+
+$("focusLength").addEventListener("change",() => {
+  if (timerMode === "focus" && !timerInterval) {
+    timerRemaining = Number($("focusLength").value)*60;
+    updateClock();
+  }
+});
+
+function refreshFocusTaskOptions() {
+  const select = $("focusTask");
+  const previous = select.value;
+  const openTasks = state.tasks.filter(t => !t.done);
+
+  select.innerHTML = '<option value="">Choose a task (optional)</option>' +
+    openTasks.map(t => '<option value="'+escapeHTML(t.id)+'">'+
+      escapeHTML(t.subject+" — "+t.title)+'</option>').join("");
+
+  if (openTasks.some(t => t.id === previous)) select.value = previous;
+}
+
+/* ===================== DASHBOARD ===================== */
+
+function renderDashboard() {
+  const today = localDate();
+  const now = new Date();
+  const hour = now.getHours();
+  const greeting = hour < 12 ? "GOOD MORNING" : hour < 18 ? "GOOD AFTERNOON" : "GOOD EVENING";
+  $("greeting").textContent = greeting;
+  $("welcomeTitle").textContent = state.profile.name
+    ? "Let's get it done, "+state.profile.name+"."
+    : "Let's get things done.";
+
+  $("dateChip").textContent = now.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
+
+  const openTasks = state.tasks.filter(t => !t.done);
+  const upcoming = state.tests.filter(t => t.date >= today && daysBetween(today,t.date) <= 7);
+  const completed = state.tasks.filter(t => t.done);
+  const revisionMinutes = state.plan.filter(s => !s.done)
+    .reduce((sum,s) => sum+(Number(s.minutes)||0),0);
+
+  $("statTasks").textContent = openTasks.length;
+  $("statTests").textContent = upcoming.length;
+  $("statDone").textContent = completed.length;
+  $("statRevision").textContent = revisionMinutes >= 60
+    ? Math.floor(revisionMinutes/60)+"h "+(revisionMinutes%60 ? revisionMinutes%60+"m" : "")
+    : revisionMinutes+"m";
+
+  const percent = state.tasks.length
+    ? Math.round(completed.length/state.tasks.length*100) : 0;
+  $("progressText").textContent = percent+"%";
+  $("progressBar").style.width = percent+"%";
+  $("progressCaption").textContent = state.tasks.length
+    ? completed.length+" of "+state.tasks.length+" tasks completed."
+    : "Add your first task to start tracking progress.";
+
+  $("testProgressText").textContent = state.tests.length;
+  $("testProgressBar").style.width = Math.min(100,state.tests.length*10)+"%";
+
+  const todayTasks = state.tasks.filter(t => !t.done && (!t.due || t.due <= today))
+    .sort((a,b) => priorityRank(a.priority)-priorityRank(b.priority))
+    .slice(0,5);
+
+  $("dashboardTasks").innerHTML = todayTasks.length ? todayTasks.map(t => `
+    <div class="item">
+      <input type="checkbox" aria-label="Complete ${escapeHTML(t.title)}" data-task-toggle="${escapeHTML(t.id)}">
+      <div class="item-main">
+        <div class="item-title">${escapeHTML(t.title)}</div>
+        <div class="item-meta">${escapeHTML(t.subject)} · ${escapeHTML(deadlineText(t.due))}</div>
+      </div>
+      <span class="badge">${Number(t.minutes)||30}m</span>
+    </div>
+  `).join("") : emptyHTML("You're clear for now","Add homework or use the time to revise a topic.");
+
+  const next = [...state.tests].filter(t => t.date >= today)
+    .sort((a,b) => a.date.localeCompare(b.date)).slice(0,4);
+
+  $("dashboardTests").innerHTML = next.length ? next.map(t => `
+    <div class="item">
+      <div class="item-main">
+        <div class="item-title">${escapeHTML(t.subject)}</div>
+        <div class="item-meta">${escapeHTML(formatDate(t.date))} · ${escapeHTML(t.topics)}</div>
+      </div>
+      ${dateBadge(t.date)}
+    </div>
+  `).join("") : emptyHTML("No upcoming tests","Add a test to start planning ahead.");
+
+  $("focusCount").textContent = Number(state.focus.sessions)||0;
+  const focusMinutes = Number(state.focus.minutes)||0;
+  $("focusTotal").textContent = focusMinutes >= 60
+    ? Math.floor(focusMinutes/60)+"h "+(focusMinutes%60 ? focusMinutes%60+"m" : "")
+    : focusMinutes+"m";
+}
+
+/* ===================== SETTINGS AND BACKUPS ===================== */
+
+$("profileForm").addEventListener("submit",event => {
+  event.preventDefault();
+  state.profile.name = $("profileName").value.trim();
+  state.profile.year = $("schoolYear").value;
+  saveState();
+  renderAll();
+  toast("Profile saved.");
+});
+
+$("exportData").addEventListener("click",() => {
+  const blob = new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "study-hq-backup-"+localDate()+".json";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url),1000);
+  toast("Backup export started.");
+});
+
+$("importButton").addEventListener("click",() => $("importFile").click());
+
+$("importFile").addEventListener("change",async event => {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  try {
+    const text = await file.text();
+    const imported = normaliseState(JSON.parse(text));
+
+    if (!confirm("Import this backup? Your current planner data will be replaced.")) {
+      event.target.value = "";
+      return;
+    }
+
+    state = imported;
+    saveState();
+    refreshSubjectDropdowns();
+    loadSettingsIntoForm();
+    renderAll();
+    toast("Backup imported.");
+  } catch (error) {
+    toast("That file isn't a valid Study HQ backup.");
+  }
+
+  event.target.value = "";
+});
+
+$("resetPlanSettings").addEventListener("click",() => {
+  $("planDays").value = "7";
+  $("dailyLimit").value = "60";
+  $("planStyle").value = "balanced";
+  $("planStart").value = localDate();
+
+  state.settings = {
+    planDays:7,dailyLimit:60,planStyle:"balanced",planStart:localDate()
+  };
+  saveState();
+  toast("Planner settings reset.");
+});
+
+$("deleteAll").addEventListener("click",() => {
+  if (!confirm("Delete ALL tasks, tests, subjects, progress and revision sessions? Export a backup first if you want to keep them.")) return;
+  if (!confirm("Are you absolutely sure? This cannot be undone.")) return;
+
+  stopTimer();
+  state = freshState();
+  saveState();
+  loadSettingsIntoForm();
+  refreshSubjectDropdowns();
+  $("taskSearch").value = "";
+  $("testSearch").value = "";
+  renderAll();
+  toast("Study data cleared.");
+});
+
+function loadSettingsIntoForm() {
+  $("profileName").value = state.profile.name || "";
+  $("schoolYear").value = state.profile.year || "Year 8";
+  $("planDays").value = String(state.settings.planDays || 7);
+  $("dailyLimit").value = String(state.settings.dailyLimit || 60);
+  $("planStyle").value = state.settings.planStyle || "balanced";
+  $("planStart").value = state.settings.planStart || localDate();
+}
+
+/* ===================== RENDER ALL ===================== */
+
+function renderAll() {
+  renderTasks();
+  renderTests();
+  renderPlan();
+  renderSubjects();
+  renderDashboard();
+  refreshFocusTaskOptions();
+}
+
+function initialise() {
+  loadState();
+  refreshSubjectDropdowns();
+  loadSettingsIntoForm();
+
+  $("taskDue").min = "";
+  $("testDate").min = localDate();
+
+  renderAll();
+  updateClock();
+}
+
+initialise();
+</script>
+</body>
+</html>
